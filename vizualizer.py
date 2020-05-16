@@ -60,13 +60,20 @@ if __name__ == '__main__':
         app.canvas.create_image(50, 100, anchor='nw', image=unprocessed_img)
 
         # create the kernel
-        kernel = np.array([[1, 0, 0], [1, 0, 0], [1, 0, 0]])
+
+        # sharpen matrix:
+        # kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+        # identity matrix:
+        # kernel = np.array([[0, 0, 0], [0, 1, 0], [0, 0, 0]])
+        # edge detection:
+        kernel = np.array([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]])
+
         # the unprocessed_img as an array
         _image_array = np.array(_image)
-
+        _image_array = convolution(image=_image_array,
+                                   kernel=kernel)
         # convolve the image with the kernel and then create on the canvas
-        convolved_img = Image.fromarray(convolution(image=_image_array,
-                                                    kernel=kernel))
+        convolved_img = Image.fromarray(_image_array)
         convolved_img = ImageTk.PhotoImage(convolved_img)
         app.canvas.create_image(400, 100, anchor='nw', image=convolved_img)
 

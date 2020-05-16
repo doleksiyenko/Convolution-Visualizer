@@ -22,25 +22,35 @@ def convolution(image: np.array, kernel: np.array) -> np.array:
     Precondition:
                 len(kernel) == len(kernel[0])
     """
-    # apply SAME padding, and keep stride at 1
+
+    # default condition: apply SAME padding, and keep stride at 1
     stride_x = 1
     stride_y = 1
-    padding_y = (len(kernel) - 1) / 2
-    padding_x = (len(kernel[0]) - 1) / 2
+    padding_y = int(len(kernel - 1) / 2)
+    padding_x = int(len((kernel[0]) - 1) / 2)
+    # create the return array with with the same dimensions as <image>,
+    # and then create a padded image
+    convolved_image = np.zeros((len(image), len(image[0])))
+    padded_image = np.zeros((len(image) + 2 * padding_y,
+                             len(image[0]) + 2 * padding_x))
+    padded_image[padding_x: -padding_x, padding_y: -padding_y] = image
 
-    # create the return array
-    convolved_image = np.zeros((len(image) + int(padding_y),
-                                len(image[0]) + int(padding_x)))
-
-    for py in range(0, len(image), stride_y):
-        for px in range(0, len(image[0]), stride_x):
+    max_ = 0
+    for py in range(0, len(padded_image) - len(kernel), stride_y):
+        for px in range(0, len(padded_image[0]) - len(kernel[0]), stride_x):
             # scan the matrix over columns in image array, then shift the matrix
             # down, and repeat
-            pass
+            padded_image_section = padded_image[py: py + len(kernel[0]),
+                                                px: px + len(kernel)]
+            # print(padded_image_section)
+            convolved_image[py, px] = int(np.tensordot(padded_image_section,
+                                                       kernel))
+            max_ = max(max_, convolved_image[py, px])
 
+    # normalize the image
+    convolved_image = 255 * convolved_image / max_
     return convolved_image
 
 
 if __name__ == '__main__':
-
     print('Please run the vizualizer.py.')
