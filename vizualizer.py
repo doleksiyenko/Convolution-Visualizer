@@ -1,8 +1,10 @@
 import numpy as np
 from PIL import Image, ImageTk
 import os
+
 import tkinter as tk
 from convolution import convolution
+
 
 def generate_new_image():
     a = np.zeros((300,300))
@@ -53,19 +55,20 @@ if __name__ == '__main__':
         app = Vizualizer(master=root)
 
         # load the unprocessed image into the canvas
-        _image = Image.open(app.images[0])
+        _image = Image.open(app.images[0]).convert(mode='L')
         unprocessed_img = ImageTk.PhotoImage(_image)
-        app.canvas.create_image(0,100, anchor='nw', image=unprocessed_img)
+        app.canvas.create_image(50, 100, anchor='nw', image=unprocessed_img)
 
         # create the kernel
         kernel = np.array([[1, 0, 0], [1, 0, 0], [1, 0, 0]])
         # the unprocessed_img as an array
         _image_array = np.array(_image)
 
-        print(_image_array)
-
-        convolved_img = convolution(image=_image_array, kernel=kernel)
-        app.canvas.create_image()
+        # convolve the image with the kernel and then create on the canvas
+        convolved_img = Image.fromarray(convolution(image=_image_array,
+                                                    kernel=kernel))
+        convolved_img = ImageTk.PhotoImage(convolved_img)
+        app.canvas.create_image(400, 100, anchor='nw', image=convolved_img)
 
         # run the mainloop
         app.mainloop()
