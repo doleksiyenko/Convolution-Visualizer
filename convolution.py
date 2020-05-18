@@ -35,7 +35,6 @@ def convolution(image: np.array, kernel: np.array) -> np.array:
                              len(image[0]) + 2 * padding_x))
     padded_image[padding_x: -padding_x, padding_y: -padding_y] = image
 
-    max_ = 0
     for py in range(0, len(padded_image) - len(kernel), stride_y):
         for px in range(0, len(padded_image[0]) - len(kernel[0]), stride_x):
             # scan the matrix over columns in image array, then shift the matrix
@@ -45,10 +44,7 @@ def convolution(image: np.array, kernel: np.array) -> np.array:
             # print(padded_image_section)
             convolved_image[py, px] = int(np.tensordot(padded_image_section,
                                                        kernel))
-            max_ = max(max_, convolved_image[py, px])
 
-    # normalize the image
-    convolved_image = 255 * convolved_image / max_
     return convolved_image
 
 
