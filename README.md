@@ -1,6 +1,7 @@
 # Convolution-Visualizer
 
 A small project to vizualize convolution with different filters on images.
+Sample image obtained from : https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png
 
 Sample filters:
 Right sobel: [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]
